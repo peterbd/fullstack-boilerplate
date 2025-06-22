@@ -1,44 +1,60 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import "./Navbar.css";
 
-function Navbar() {
-  const location = useLocation();
+const Navbar = () => {
+  const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
 
-  const isActive = (path) => {
-    return location.pathname === path;
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
   };
 
   return (
     <nav className="navbar">
-      <div className="navbar-container">
-        <Link to="/" className="navbar-brand">
-          <span className="brand-icon">🚀</span>
+      <div className="nav-container">
+        <Link to="/" className="nav-logo">
           Fullstack Boilerplate
         </Link>
 
-        <div className="navbar-menu">
-          <Link
-            to="/"
-            className={`navbar-link ${isActive("/") ? "active" : ""}`}
-          >
+        <div className="nav-menu">
+          <Link to="/" className="nav-link">
             Home
           </Link>
-          <Link
-            to="/users"
-            className={`navbar-link ${isActive("/users") ? "active" : ""}`}
-          >
-            Users
-          </Link>
-          <Link
-            to="/about"
-            className={`navbar-link ${isActive("/about") ? "active" : ""}`}
-          >
+          <Link to="/about" className="nav-link">
             About
           </Link>
+
+          {isAuthenticated ? (
+            <>
+              <Link to="/dashboard" className="nav-link">
+                Dashboard
+              </Link>
+              <Link to="/users" className="nav-link">
+                Users
+              </Link>
+              <div className="nav-user">
+                <span className="user-name">Hello, {user?.name}</span>
+                <button onClick={handleLogout} className="logout-btn">
+                  Logout
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="nav-link">
+                Login
+              </Link>
+              <Link to="/register" className="nav-link">
+                Register
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>
   );
-}
+};
 
 export default Navbar;

@@ -1,109 +1,237 @@
 const express = require("express");
+const { successResponse } = require("../utils/response");
+const {
+  asyncHandler,
+  NotFoundError,
+  ValidationError,
+  ConflictError,
+} = require("../utils/errorHandler");
+
 const router = express.Router();
 
-// Mock data for demonstration
-let users = [
-  { id: 1, name: "John Doe", email: "john@example.com" },
-  { id: 2, name: "Jane Smith", email: "jane@example.com" },
-  { id: 3, name: "Bob Johnson", email: "bob@example.com" },
+// Mock user database for demonstration
+const users = [
+  {
+    id: 1,
+    name: "John Doe",
+    email: "john@example.com",
+    role: "user",
+    createdAt: "2024-01-01T00:00:00.000Z",
+  },
+  {
+    id: 2,
+    name: "Jane Smith",
+    email: "jane@example.com",
+    role: "admin",
+    createdAt: "2024-01-02T00:00:00.000Z",
+  },
+  {
+    id: 3,
+    name: "Bob Johnson",
+    email: "bob@example.com",
+    role: "user",
+    createdAt: "2024-01-03T00:00:00.000Z",
+  },
 ];
 
-// GET all users
-router.get("/", (req, res) => {
-  res.json({
-    success: true,
-    data: users,
-    count: users.length,
-  });
-});
+/**
+ * Get all users
+ * GET /api/users
+ */
+router.get(
+  "/",
+  asyncHandler(async (req, res) => {
+    const { page = 1, limit = 10, search } = req.query;
 
-// GET user by ID
-router.get("/:id", (req, res) => {
-  const user = users.find((u) => u.id === parseInt(req.params.id));
+    let filteredUsers = [...users];
 
-  if (!user) {
-    return res.status(404).json({
-      success: false,
-      error: "User not found",
-    });
-  }
+    // Apply search filter if provided
+    if (search) {
+      filteredUsers = filteredUsers.filter(
+        (user) =>
+          user.name.toLowerCase().includes(search.toLowerCase()) ||
+          user.email.toLowerCase().includes(search.toLowerCase())
+      );
+    }
 
-  res.json({
-    success: true,
-    data: user,
-  });
-});
+    // Apply pagination
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
-// POST create new user
-router.post("/", (req, res) => {
-  const { name, email } = req.body;
+    const response = {
+      users: paginatedUsers,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(filteredUsers.length / limit),
+        totalUsers: filteredUsers.length,
+        hasNextPage: endIndex < filteredUsers.length,
+        hasPrevPage: page > 1,
+      },
+    };
 
-  if (!name || !email) {
-    return res.status(400).json({
-      success: false,
-      error: "Name and email are required",
-    });
-  }
+    return successResponse(res, response, "Users retrieved successfully");
+  })
+);
 
-  const newUser = {
-    id: users.length + 1,
-    name,
-    email,
-  };
+/**
+ * Get user by ID
+ * GET /api/users/:id
+ */
+router.get(
+  "/:id",
+  asyncHandler(async (req, res) => {
+    const userId = parseInt(req.params.id);
 
-  users.push(newUser);
+    if (isNaN(userId)) {
+      throw new ValidationError("Invalid user ID");
+    }
 
-  res.status(201).json({
-    success: true,
-    data: newUser,
-  });
-});
+    const user = users.find((u) => u.id === userId);
 
-// PUT update user
-router.put("/:id", (req, res) => {
-  const { name, email } = req.body;
-  const userId = parseInt(req.params.id);
+    if (!user) {
+      throw new NotFoundError("User");
+    }
 
-  const userIndex = users.findIndex((u) => u.id === userId);
+    return successResponse(res, user, "User retrieved successfully");
+  })
+);
 
-  if (userIndex === -1) {
-    return res.status(404).json({
-      success: false,
-      error: "User not found",
-    });
-  }
+/**
+ * Create new user
+ * POST /api/users
+ */
+router.post(
+  "/",
+  asyncHandler(async (req, res) => {
+    const { name, email, role = "user" } = req.body;
 
-  users[userIndex] = {
-    ...users[userIndex],
-    name: name || users[userIndex].name,
-    email: email || users[userIndex].email,
-  };
+    // Validate required fields
+    if (!name || !email) {
+      throw new ValidationError("Name and email are required");
+    }
 
-  res.json({
-    success: true,
-    data: users[userIndex],
-  });
-});
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      throw new ValidationError("Invalid email format");
+    }
 
-// DELETE user
-router.delete("/:id", (req, res) => {
-  const userId = parseInt(req.params.id);
-  const userIndex = users.findIndex((u) => u.id === userId);
+    // Check if user already exists
+    const existingUser = users.find(
+      (u) => u.email.toLowerCase() === email.toLowerCase()
+    );
+    if (existingUser) {
+      throw new ConflictError("User with this email already exists");
+    }
 
-  if (userIndex === -1) {
-    return res.status(404).json({
-      success: false,
-      error: "User not found",
-    });
-  }
+    // Create new user
+    const newUser = {
+      id: users.length + 1,
+      name: name.trim(),
+      email: email.toLowerCase().trim(),
+      role,
+      createdAt: new Date().toISOString(),
+    };
 
-  const deletedUser = users.splice(userIndex, 1)[0];
+    users.push(newUser);
 
-  res.json({
-    success: true,
-    data: deletedUser,
-    message: "User deleted successfully",
-  });
-});
+    return successResponse(res, newUser, "User created successfully", 201);
+  })
+);
+
+/**
+ * Update user
+ * PUT /api/users/:id
+ */
+router.put(
+  "/:id",
+  asyncHandler(async (req, res) => {
+    const userId = parseInt(req.params.id);
+    const { name, email, role } = req.body;
+
+    if (isNaN(userId)) {
+      throw new ValidationError("Invalid user ID");
+    }
+
+    const userIndex = users.findIndex((u) => u.id === userId);
+
+    if (userIndex === -1) {
+      throw new NotFoundError("User");
+    }
+
+    // Check if email is being changed and if it conflicts with existing user
+    if (email && email !== users[userIndex].email) {
+      const existingUser = users.find(
+        (u) => u.email.toLowerCase() === email.toLowerCase() && u.id !== userId
+      );
+      if (existingUser) {
+        throw new ConflictError("User with this email already exists");
+      }
+    }
+
+    // Update user
+    users[userIndex] = {
+      ...users[userIndex],
+      ...(name && { name: name.trim() }),
+      ...(email && { email: email.toLowerCase().trim() }),
+      ...(role && { role }),
+      updatedAt: new Date().toISOString(),
+    };
+
+    return successResponse(res, users[userIndex], "User updated successfully");
+  })
+);
+
+/**
+ * Delete user
+ * DELETE /api/users/:id
+ */
+router.delete(
+  "/:id",
+  asyncHandler(async (req, res) => {
+    const userId = parseInt(req.params.id);
+
+    if (isNaN(userId)) {
+      throw new ValidationError("Invalid user ID");
+    }
+
+    const userIndex = users.findIndex((u) => u.id === userId);
+
+    if (userIndex === -1) {
+      throw new NotFoundError("User");
+    }
+
+    const deletedUser = users.splice(userIndex, 1)[0];
+
+    return successResponse(res, deletedUser, "User deleted successfully");
+  })
+);
+
+/**
+ * Get user statistics
+ * GET /api/users/stats/overview
+ */
+router.get(
+  "/stats/overview",
+  asyncHandler(async (req, res) => {
+    const stats = {
+      totalUsers: users.length,
+      usersByRole: users.reduce((acc, user) => {
+        acc[user.role] = (acc[user.role] || 0) + 1;
+        return acc;
+      }, {}),
+      recentUsers: users
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .slice(0, 5),
+    };
+
+    return successResponse(
+      res,
+      stats,
+      "User statistics retrieved successfully"
+    );
+  })
+);
 
 module.exports = router;
