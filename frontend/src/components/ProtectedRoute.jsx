@@ -8,9 +8,9 @@ const ProtectedRoute = ({ children, requireAuth = true }) => {
   // Show loading spinner while checking authentication
   if (loading) {
     return (
-      <div className="loading-container">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
         <div className="loading-spinner"></div>
-        <p>Loading...</p>
+        <p className="mt-4 text-gray-600">Loading...</p>
       </div>
     );
   }

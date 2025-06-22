@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
-import "./AuthForms.css";
 
 const RegisterForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -33,14 +32,18 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h2>Create Account</h2>
-        <p className="auth-subtitle">Join us today</p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md animate-slide-up">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">
+          Create Account
+        </h2>
+        <p className="text-center text-gray-600 mb-8">Join us today</p>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="form-group">
-            <label htmlFor="name">Full Name</label>
+            <label htmlFor="name" className="form-label">
+              Full Name
+            </label>
             <input
               type="text"
               id="name"
@@ -51,7 +54,9 @@ const RegisterForm = () => {
                   message: "Name must be at least 2 characters",
                 },
               })}
-              className={errors.name ? "error" : ""}
+              className={`input ${
+                errors.name ? "border-red-500 bg-red-50" : ""
+              }`}
               placeholder="Enter your full name"
             />
             {errors.name && (
@@ -60,7 +65,9 @@ const RegisterForm = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email" className="form-label">
+              Email
+            </label>
             <input
               type="email"
               id="email"
@@ -71,7 +78,9 @@ const RegisterForm = () => {
                   message: "Invalid email address",
                 },
               })}
-              className={errors.email ? "error" : ""}
+              className={`input ${
+                errors.email ? "border-red-500 bg-red-50" : ""
+              }`}
               placeholder="Enter your email"
             />
             {errors.email && (
@@ -80,7 +89,9 @@ const RegisterForm = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password" className="form-label">
+              Password
+            </label>
             <input
               type="password"
               id="password"
@@ -96,7 +107,9 @@ const RegisterForm = () => {
                     "Password must contain at least one uppercase letter, one lowercase letter, and one number",
                 },
               })}
-              className={errors.password ? "error" : ""}
+              className={`input ${
+                errors.password ? "border-red-500 bg-red-50" : ""
+              }`}
               placeholder="Create a password"
             />
             {errors.password && (
@@ -105,7 +118,9 @@ const RegisterForm = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
+            <label htmlFor="confirmPassword" className="form-label">
+              Confirm Password
+            </label>
             <input
               type="password"
               id="confirmPassword"
@@ -114,7 +129,9 @@ const RegisterForm = () => {
                 validate: (value) =>
                   value === password || "Passwords do not match",
               })}
-              className={errors.confirmPassword ? "error" : ""}
+              className={`input ${
+                errors.confirmPassword ? "border-red-500 bg-red-50" : ""
+              }`}
               placeholder="Confirm your password"
             />
             {errors.confirmPassword && (
@@ -124,15 +141,29 @@ const RegisterForm = () => {
             )}
           </div>
 
-          <button type="submit" className="auth-button" disabled={isLoading}>
-            {isLoading ? "Creating Account..." : "Create Account"}
+          <button
+            type="submit"
+            className="btn btn-primary w-full"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <div className="flex items-center justify-center">
+                <div className="loading-spinner mr-2"></div>
+                Creating Account...
+              </div>
+            ) : (
+              "Create Account"
+            )}
           </button>
         </form>
 
-        <div className="auth-footer">
-          <p>
+        <div className="mt-8 pt-6 border-t border-gray-200 text-center">
+          <p className="text-gray-600">
             Already have an account?{" "}
-            <Link to="/login" className="auth-link">
+            <Link
+              to="/login"
+              className="text-blue-600 font-medium hover:text-blue-700 hover:underline"
+            >
               Sign in
             </Link>
           </p>

@@ -9,7 +9,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Users from "./pages/Users";
 import About from "./pages/About";
-import "./App.css";
+import "./index.css";
 
 function App() {
   return (

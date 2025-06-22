@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { apiService, apiCall } from "../utils/api";
-import "./Dashboard.css";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -37,50 +36,56 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="dashboard-container">
-        <div className="loading-container">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col items-center justify-center min-h-96">
           <div className="loading-spinner"></div>
-          <p>Loading dashboard...</p>
+          <p className="mt-4 text-gray-600">Loading dashboard...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-header">
-        <h1>Welcome to your Dashboard</h1>
-        <p>Hello, {user?.name}! Here's what's happening with your account.</p>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-gray-800 mb-4">
+          Welcome to your Dashboard
+        </h1>
+        <p className="text-xl text-gray-600">
+          Hello, {user?.name}! Here's what's happening with your account.
+        </p>
       </div>
 
-      <div className="dashboard-grid">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* User Profile Card */}
-        <div className="dashboard-card">
-          <h3>Profile Information</h3>
-          <div className="profile-info">
-            <div className="info-item">
-              <span className="label">Name:</span>
-              <span className="value">{user?.name}</span>
+        <div className="card">
+          <h3 className="text-2xl font-semibold text-gray-800 mb-6 pb-4 border-b border-gray-200">
+            Profile Information
+          </h3>
+          <div className="space-y-4">
+            <div className="flex justify-between items-center py-3 border-b border-gray-100">
+              <span className="font-medium text-gray-600">Name:</span>
+              <span className="font-semibold text-gray-800">{user?.name}</span>
             </div>
-            <div className="info-item">
-              <span className="label">Email:</span>
-              <span className="value">{user?.email}</span>
+            <div className="flex justify-between items-center py-3 border-b border-gray-100">
+              <span className="font-medium text-gray-600">Email:</span>
+              <span className="font-semibold text-gray-800">{user?.email}</span>
             </div>
-            <div className="info-item">
-              <span className="label">Roles:</span>
-              <span className="value">
+            <div className="flex justify-between items-center py-3 border-b border-gray-100">
+              <span className="font-medium text-gray-600">Roles:</span>
+              <div className="flex gap-2 flex-wrap">
                 {user?.roles?.map((role) => (
-                  <span key={role} className="role-badge">
+                  <span key={role} className="badge badge-primary">
                     {role}
                   </span>
                 ))}
-              </span>
+              </div>
             </div>
-            <div className="info-item">
-              <span className="label">Status:</span>
+            <div className="flex justify-between items-center py-3">
+              <span className="font-medium text-gray-600">Status:</span>
               <span
-                className={`status-badge ${
-                  user?.isActive ? "active" : "inactive"
+                className={`badge ${
+                  user?.isActive ? "badge-success" : "badge-error"
                 }`}
               >
                 {user?.isActive ? "Active" : "Inactive"}
@@ -90,76 +95,96 @@ const Dashboard = () => {
         </div>
 
         {/* System Health Card */}
-        <div className="dashboard-card">
-          <h3>System Health</h3>
+        <div className="card">
+          <h3 className="text-2xl font-semibold text-gray-800 mb-6 pb-4 border-b border-gray-200">
+            System Health
+          </h3>
           {healthData ? (
-            <div className="health-info">
-              <div className="info-item">
-                <span className="label">Status:</span>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                <span className="font-medium text-gray-600">Status:</span>
                 <span
-                  className={`status-badge ${
-                    healthData.status === "healthy" ? "healthy" : "unhealthy"
+                  className={`badge ${
+                    healthData.status === "healthy"
+                      ? "badge-success"
+                      : "badge-error"
                   }`}
                 >
                   {healthData.status}
                 </span>
               </div>
-              <div className="info-item">
-                <span className="label">Database:</span>
+              <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                <span className="font-medium text-gray-600">Database:</span>
                 <span
-                  className={`status-badge ${
+                  className={`badge ${
                     healthData.database?.status === "healthy"
-                      ? "healthy"
-                      : "unhealthy"
+                      ? "badge-success"
+                      : "badge-error"
                   }`}
                 >
                   {healthData.database?.status || "Unknown"}
                 </span>
               </div>
-              <div className="info-item">
-                <span className="label">Uptime:</span>
-                <span className="value">{Math.round(healthData.uptime)}s</span>
+              <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                <span className="font-medium text-gray-600">Uptime:</span>
+                <span className="font-semibold text-gray-800">
+                  {Math.round(healthData.uptime)}s
+                </span>
               </div>
-              <div className="info-item">
-                <span className="label">Environment:</span>
-                <span className="value">{healthData.environment}</span>
+              <div className="flex justify-between items-center py-3">
+                <span className="font-medium text-gray-600">Environment:</span>
+                <span className="font-semibold text-gray-800">
+                  {healthData.environment}
+                </span>
               </div>
             </div>
           ) : (
-            <p className="error-message">Unable to fetch health data</p>
+            <p className="text-red-600 font-medium p-4 bg-red-50 rounded-lg border-l-4 border-red-500">
+              Unable to fetch health data
+            </p>
           )}
         </div>
 
         {/* Protected Data Card */}
-        <div className="dashboard-card">
-          <h3>Protected Content</h3>
+        <div className="card">
+          <h3 className="text-2xl font-semibold text-gray-800 mb-6 pb-4 border-b border-gray-200">
+            Protected Content
+          </h3>
           {protectedData ? (
-            <div className="protected-content">
-              <p className="success-message">{protectedData.message}</p>
-              <div className="info-item">
-                <span className="label">User ID:</span>
-                <span className="value">{protectedData.userId}</span>
+            <div className="space-y-4">
+              <p className="text-green-600 font-medium p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
+                {protectedData.message}
+              </p>
+              <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                <span className="font-medium text-gray-600">User ID:</span>
+                <span className="font-semibold text-gray-800">
+                  {protectedData.userId}
+                </span>
               </div>
-              <div className="info-item">
-                <span className="label">Timestamp:</span>
-                <span className="value">
+              <div className="flex justify-between items-center py-3">
+                <span className="font-medium text-gray-600">Timestamp:</span>
+                <span className="font-semibold text-gray-800">
                   {new Date(protectedData.timestamp).toLocaleString()}
                 </span>
               </div>
             </div>
           ) : (
-            <p className="error-message">Unable to fetch protected data</p>
+            <p className="text-red-600 font-medium p-4 bg-red-50 rounded-lg border-l-4 border-red-500">
+              Unable to fetch protected data
+            </p>
           )}
         </div>
 
         {/* Quick Actions Card */}
-        <div className="dashboard-card">
-          <h3>Quick Actions</h3>
-          <div className="quick-actions">
-            <button className="action-btn primary">View Profile</button>
-            <button className="action-btn secondary">Manage Users</button>
-            <button className="action-btn secondary">System Settings</button>
-            <button className="action-btn secondary">View Logs</button>
+        <div className="card">
+          <h3 className="text-2xl font-semibold text-gray-800 mb-6 pb-4 border-b border-gray-200">
+            Quick Actions
+          </h3>
+          <div className="grid grid-cols-2 gap-4">
+            <button className="btn btn-primary">View Profile</button>
+            <button className="btn btn-secondary">Manage Users</button>
+            <button className="btn btn-secondary">System Settings</button>
+            <button className="btn btn-secondary">View Logs</button>
           </div>
         </div>
       </div>

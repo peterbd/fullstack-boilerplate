@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { apiService, apiCall } from "../utils/api";
-import "./Users.css";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -84,10 +83,10 @@ const Users = () => {
 
   if (loading) {
     return (
-      <div className="users-container">
-        <div className="loading-container">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col items-center justify-center min-h-96">
           <div className="loading-spinner"></div>
-          <p>Loading users...</p>
+          <p className="mt-4 text-gray-600">Loading users...</p>
         </div>
       </div>
     );
@@ -95,11 +94,11 @@ const Users = () => {
 
   if (error) {
     return (
-      <div className="users-container">
-        <div className="error-container">
-          <h2>Error</h2>
-          <p>{error}</p>
-          <button onClick={fetchUsers} className="retry-btn">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center py-16">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Error</h2>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <button onClick={fetchUsers} className="btn btn-primary">
             Try Again
           </button>
         </div>
@@ -108,146 +107,191 @@ const Users = () => {
   }
 
   return (
-    <div className="users-container">
-      <div className="users-header">
-        <h1>Users Management</h1>
-        <p>Manage user accounts and permissions</p>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-gray-800 mb-4">
+          Users Management
+        </h1>
+        <p className="text-xl text-gray-600 mb-6">
+          Manage user accounts and permissions
+        </p>
         <button className="btn btn-primary" onClick={() => setShowForm(true)}>
           Add New User
         </button>
       </div>
 
-      <div className="users-stats">
-        <div className="stat-card">
-          <h3>Total Users</h3>
-          <span className="stat-number">{users.length}</span>
+      {/* Stats Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="card text-center">
+          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">
+            Total Users
+          </h3>
+          <span className="text-4xl font-bold text-gray-800">
+            {users.length}
+          </span>
         </div>
-        <div className="stat-card">
-          <h3>Active Users</h3>
-          <span className="stat-number">
+        <div className="card text-center">
+          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">
+            Active Users
+          </h3>
+          <span className="text-4xl font-bold text-gray-800">
             {users.filter((user) => user.isActive).length}
           </span>
         </div>
-        <div className="stat-card">
-          <h3>Admins</h3>
-          <span className="stat-number">
+        <div className="card text-center">
+          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">
+            Admins
+          </h3>
+          <span className="text-4xl font-bold text-gray-800">
             {users.filter((user) => user.roles?.includes("ADMIN")).length}
           </span>
         </div>
       </div>
 
-      <div className="users-table-container">
-        <table className="users-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Roles</th>
-              <th>Status</th>
-              <th>Created</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>
-                  <div className="user-info">
-                    <span className="user-name">{user.name}</span>
-                  </div>
-                </td>
-                <td>{user.email}</td>
-                <td>
-                  <div className="roles-container">
-                    {user.roles?.map((role) => (
-                      <span key={role} className="role-badge">
-                        {role}
-                      </span>
-                    ))}
-                  </div>
-                </td>
-                <td>
-                  <span
-                    className={`status-badge ${
-                      user.isActive ? "active" : "inactive"
-                    }`}
-                  >
-                    {user.isActive ? "Active" : "Inactive"}
-                  </span>
-                </td>
-                <td>{new Date(user.createdAt).toLocaleDateString()}</td>
-                <td>
-                  <div className="action-buttons">
-                    <button
-                      className="action-btn edit"
-                      onClick={() => handleEdit(user)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="action-btn delete"
-                      onClick={() => handleDeleteUser(user.id)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
+      {/* Users Table */}
+      <div className="card overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  ID
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Name
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Email
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Roles
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Created
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {users.map((user) => (
+                <tr key={user.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {user.id}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <span className="font-medium text-gray-900">
+                        {user.name}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {user.email}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex gap-1 flex-wrap">
+                      {user.roles?.map((role) => (
+                        <span key={role} className="badge badge-primary">
+                          {role}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span
+                      className={`badge ${
+                        user.isActive ? "badge-success" : "badge-error"
+                      }`}
+                    >
+                      {user.isActive ? "Active" : "Inactive"}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {new Date(user.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex gap-2">
+                      <button
+                        className="btn btn-secondary text-sm px-3 py-1"
+                        onClick={() => handleEdit(user)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="btn bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1"
+                        onClick={() => handleDeleteUser(user.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {users.length === 0 && (
-        <div className="empty-state">
-          <h3>No users found</h3>
-          <p>There are no users in the system yet.</p>
+        <div className="text-center py-16">
+          <h3 className="text-2xl font-semibold text-gray-800 mb-2">
+            No users found
+          </h3>
+          <p className="text-gray-600">There are no users in the system yet.</p>
         </div>
       )}
 
+      {/* Form Modal */}
       {showForm && (
-        <div className="form-card">
-          <h2>{editingUser ? "Edit User" : "Add New User"}</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label className="form-label">Name</label>
-              <input
-                type="text"
-                className="form-input"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Email</label>
-              <input
-                type="email"
-                className="form-input"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                required
-              />
-            </div>
-            <div className="form-actions">
-              <button type="submit" className="btn btn-primary">
-                {editingUser ? "Update User" : "Add User"}
-              </button>
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={handleCancel}
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-8 w-full max-w-md">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+              {editingUser ? "Edit User" : "Add New User"}
+            </h2>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="form-group">
+                <label className="form-label">Name</label>
+                <input
+                  type="text"
+                  className="input"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Email</label>
+                <input
+                  type="email"
+                  className="input"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  required
+                />
+              </div>
+              <div className="flex gap-4">
+                <button type="submit" className="btn btn-primary flex-1">
+                  {editingUser ? "Update User" : "Add User"}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-secondary flex-1"
+                  onClick={handleCancel}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

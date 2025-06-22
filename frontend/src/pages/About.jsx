@@ -1,222 +1,171 @@
-import "./About.css";
-
-function About() {
+const About = () => {
   return (
-    <div className="about-page">
-      <div className="about-header">
-        <h1>About This Project</h1>
-        <p className="about-subtitle">
-          A modern full-stack boilerplate built with best practices and
-          production-ready features
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-gray-800 mb-4">
+          About Fullstack Boilerplate
+        </h1>
+        <p className="text-xl text-gray-600">
+          A modern, production-ready full-stack application
         </p>
       </div>
 
-      <div className="about-content">
-        <div className="about-section">
-          <h2>🚀 What is this?</h2>
-          <p>
-            This is a comprehensive full-stack boilerplate that provides a solid
-            foundation for building modern web applications. It includes both
-            backend and frontend with all the essential features you need to get
-            started quickly.
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="space-y-6">
+          <div className="card">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              What is this?
+            </h2>
+            <p className="text-gray-600 leading-relaxed">
+              Fullstack Boilerplate is a comprehensive starter template for
+              building modern web applications. It combines the power of
+              Express.js backend with a React frontend, providing everything you
+              need to get started quickly and scale efficiently.
+            </p>
+          </div>
+
+          <div className="card">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              Key Features
+            </h2>
+            <ul className="space-y-3 text-gray-600">
+              <li className="flex items-start">
+                <span className="text-green-500 mr-2">✓</span>
+                JWT-based authentication with refresh tokens
+              </li>
+              <li className="flex items-start">
+                <span className="text-green-500 mr-2">✓</span>
+                Role-based access control (RBAC)
+              </li>
+              <li className="flex items-start">
+                <span className="text-green-500 mr-2">✓</span>
+                Prisma ORM with multiple database support
+              </li>
+              <li className="flex items-start">
+                <span className="text-green-500 mr-2">✓</span>
+                Comprehensive error handling and logging
+              </li>
+              <li className="flex items-start">
+                <span className="text-green-500 mr-2">✓</span>
+                Security middleware (CORS, rate limiting, helmet)
+              </li>
+              <li className="flex items-start">
+                <span className="text-green-500 mr-2">✓</span>
+                Modern React with hooks and context
+              </li>
+              <li className="flex items-start">
+                <span className="text-green-500 mr-2">✓</span>
+                Responsive design with Tailwind CSS
+              </li>
+              <li className="flex items-start">
+                <span className="text-green-500 mr-2">✓</span>
+                Production-ready deployment configuration
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <div className="card">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              Technology Stack
+            </h2>
+            <div className="space-y-4">
+              <div>
+                <h3 className="font-semibold text-gray-800 mb-2">Backend</h3>
+                <ul className="text-gray-600 space-y-1">
+                  <li>• Express.js - Web framework</li>
+                  <li>• Prisma - Database ORM</li>
+                  <li>• JWT - Authentication</li>
+                  <li>• bcryptjs - Password hashing</li>
+                  <li>• Helmet - Security headers</li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-800 mb-2">Frontend</h3>
+                <ul className="text-gray-600 space-y-1">
+                  <li>• React 18 - UI library</li>
+                  <li>• Vite - Build tool</li>
+                  <li>• React Router - Navigation</li>
+                  <li>• Tailwind CSS - Styling</li>
+                  <li>• Axios - HTTP client</li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-800 mb-2">Database</h3>
+                <ul className="text-gray-600 space-y-1">
+                  <li>• PostgreSQL (recommended)</li>
+                  <li>• MySQL</li>
+                  <li>• SQLite (development)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="card">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              Getting Started
+            </h2>
+            <div className="space-y-4 text-gray-600">
+              <p>
+                To get started with this boilerplate, follow these simple steps:
+              </p>
+              <ol className="list-decimal list-inside space-y-2">
+                <li>Clone the repository</li>
+                <li>
+                  Install dependencies with{" "}
+                  <code className="bg-gray-100 px-2 py-1 rounded">
+                    npm run install:all
+                  </code>
+                </li>
+                <li>Set up your environment variables</li>
+                <li>Configure your database</li>
+                <li>
+                  Run{" "}
+                  <code className="bg-gray-100 px-2 py-1 rounded">
+                    npm run db:setup
+                  </code>
+                </li>
+                <li>
+                  Start development with{" "}
+                  <code className="bg-gray-100 px-2 py-1 rounded">
+                    npm run dev
+                  </code>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-16 text-center">
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-8 rounded-2xl">
+          <h2 className="text-3xl font-bold mb-4">
+            Ready to build something amazing?
+          </h2>
+          <p className="text-xl mb-6 opacity-90">
+            This boilerplate provides a solid foundation for your next project.
           </p>
-        </div>
-
-        <div className="about-section">
-          <h2>🛠️ Technology Stack</h2>
-          <div className="tech-grid">
-            <div className="tech-category">
-              <h3>Backend</h3>
-              <ul>
-                <li>
-                  <strong>Express.js</strong> - Fast, unopinionated web
-                  framework
-                </li>
-                <li>
-                  <strong>Node.js</strong> - JavaScript runtime
-                </li>
-                <li>
-                  <strong>Helmet</strong> - Security middleware
-                </li>
-                <li>
-                  <strong>CORS</strong> - Cross-origin resource sharing
-                </li>
-                <li>
-                  <strong>Morgan</strong> - HTTP request logger
-                </li>
-                <li>
-                  <strong>Rate Limiting</strong> - API protection
-                </li>
-              </ul>
-            </div>
-
-            <div className="tech-category">
-              <h3>Frontend</h3>
-              <ul>
-                <li>
-                  <strong>React 18</strong> - UI library
-                </li>
-                <li>
-                  <strong>Vite</strong> - Build tool and dev server
-                </li>
-                <li>
-                  <strong>React Router</strong> - Client-side routing
-                </li>
-                <li>
-                  <strong>Axios</strong> - HTTP client
-                </li>
-                <li>
-                  <strong>CSS3</strong> - Modern styling
-                </li>
-                <li>
-                  <strong>Responsive Design</strong> - Mobile-first approach
-                </li>
-              </ul>
-            </div>
-
-            <div className="tech-category">
-              <h3>Development</h3>
-              <ul>
-                <li>
-                  <strong>ESLint</strong> - Code linting
-                </li>
-                <li>
-                  <strong>Nodemon</strong> - Auto-restart server
-                </li>
-                <li>
-                  <strong>Concurrently</strong> - Run multiple commands
-                </li>
-                <li>
-                  <strong>Hot Reload</strong> - Fast development
-                </li>
-                <li>
-                  <strong>Proxy</strong> - API forwarding
-                </li>
-                <li>
-                  <strong>Source Maps</strong> - Debug support
-                </li>
-              </ul>
-            </div>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="https://github.com/your-username/fullstack-boilerplate"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn bg-white text-blue-600 hover:bg-gray-100"
+            >
+              View on GitHub
+            </a>
+            <a
+              href="/dashboard"
+              className="btn bg-white/20 text-white border-white/30 hover:bg-white/30"
+            >
+              Try Demo
+            </a>
           </div>
-        </div>
-
-        <div className="about-section">
-          <h2>✨ Features</h2>
-          <div className="features-list">
-            <div className="feature-item">
-              <span className="feature-icon">🔒</span>
-              <div>
-                <h4>Security First</h4>
-                <p>
-                  Built-in security middleware, CORS protection, and rate
-                  limiting
-                </p>
-              </div>
-            </div>
-
-            <div className="feature-item">
-              <span className="feature-icon">⚡</span>
-              <div>
-                <h4>Fast Development</h4>
-                <p>
-                  Vite provides instant hot module replacement and
-                  lightning-fast builds
-                </p>
-              </div>
-            </div>
-
-            <div className="feature-item">
-              <span className="feature-icon">📱</span>
-              <div>
-                <h4>Responsive Design</h4>
-                <p>
-                  Mobile-first approach with modern CSS and flexible layouts
-                </p>
-              </div>
-            </div>
-
-            <div className="feature-item">
-              <span className="feature-icon">🔄</span>
-              <div>
-                <h4>API Integration</h4>
-                <p>Ready-to-use API endpoints with proper error handling</p>
-              </div>
-            </div>
-
-            <div className="feature-item">
-              <span className="feature-icon">🎨</span>
-              <div>
-                <h4>Modern UI</h4>
-                <p>Clean, professional design with smooth animations</p>
-              </div>
-            </div>
-
-            <div className="feature-item">
-              <span className="feature-icon">📦</span>
-              <div>
-                <h4>Production Ready</h4>
-                <p>
-                  Optimized builds, environment configuration, and deployment
-                  ready
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="about-section">
-          <h2>🚀 Getting Started</h2>
-          <div className="getting-started-steps">
-            <div className="step">
-              <div className="step-number">1</div>
-              <div>
-                <h4>Install Dependencies</h4>
-                <p>
-                  Run <code>npm run install:all</code> to install all
-                  dependencies
-                </p>
-              </div>
-            </div>
-
-            <div className="step">
-              <div className="step-number">2</div>
-              <div>
-                <h4>Start Development</h4>
-                <p>
-                  Run <code>npm run dev</code> to start both servers
-                </p>
-              </div>
-            </div>
-
-            <div className="step">
-              <div className="step-number">3</div>
-              <div>
-                <h4>Build for Production</h4>
-                <p>
-                  Run <code>npm run build</code> to create optimized builds
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="about-section">
-          <h2>📚 Next Steps</h2>
-          <p>This boilerplate provides a solid foundation. Consider adding:</p>
-          <ul className="next-steps-list">
-            <li>Database integration (MongoDB, PostgreSQL, etc.)</li>
-            <li>Authentication and authorization</li>
-            <li>File upload functionality</li>
-            <li>Testing setup (Jest, React Testing Library)</li>
-            <li>State management (Redux, Zustand)</li>
-            <li>TypeScript support</li>
-            <li>Docker configuration</li>
-            <li>CI/CD pipeline</li>
-          </ul>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default About;
